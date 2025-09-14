@@ -1,0 +1,60 @@
+# Кількість реплік подів
+replicaCount: 2
+
+# Налаштування Docker образу
+image:
+  repository: 190403256762.dkr.ecr.us-east-1.amazonaws.com/lesson-5-dev-ecr
+  tag: v1.0.1
+  pullPolicy: IfNotPresent        # Політика завантаження образу
+
+# Налаштування Kubernetes сервісу
+service:
+  type: LoadBalancer              # Тип сервісу - LoadBalancer для зовнішнього доступу
+  port: 80                        # Зовнішній порт
+  targetPort: 8000               # Внутрішній порт контейнера
+
+# Налаштування ресурсів
+resources:
+  requests:                       # Мінімальні ресурси
+    cpu: 100m                     # 0.1 CPU
+    memory: 256Mi                 # 256MB пам'яті
+  limits:                         # Максимальні ресурси
+    cpu: 500m                     # 0.5 CPU
+    memory: 512Mi                 # 512MB пам'яті
+
+# Налаштування горизонтального автоскейлінгу
+autoscaling:
+  enabled: true                   # Увімкнений автоскейлінг
+  minReplicas: 2                  # Мінімум реплік
+  maxReplicas: 6                  # Максимум реплік
+  targetCPUUtilizationPercentage: 70  # Цільове навантаження CPU в %
+
+# Конфігурація додатку
+config:
+  # Незручливі налаштування
+  DJANGO_SETTINGS_MODULE: "app.settings"
+  DJANGO_DEBUG: "false"           # Режим налагодження (вимкнений для продакшн)
+  ALLOWED_HOSTS: "*"              # Дозволені хости
+  
+  # Чутливі дані (слід перенести в secrets)
+  DJANGO_SECRET_KEY: "django-insecure-7k@m$w9#x2v&8n5q!r4p3j6h9f1s@c8z*e0y7u4i2o6b%a5g3d"
+  DATABASE_URL: "postgres://dbadmin:TempPassword123!@djangodb-postgres.cu5ygeiegfw3.us-east-1.rds.amazonaws.com:5432/djangodb"
+
+# Контекст безпеки поду
+podSecurityContext:
+  fsGroup: 1000                   # Група файлової системи
+  runAsNonRoot: true              # Запуск як не-root користувач
+
+# Контекст безпеки контейнера
+securityContext:
+  allowPrivilegeEscalation: false # Заборона підвищення привілеїв
+  runAsNonRoot: true              # Запуск як не-root користувач
+  runAsUser: 1000                 # ID користувача
+  capabilities:
+    drop:
+      - ALL                       # Видалити всі capabilities
+
+# Селектори вузлів, толерації та афінність
+nodeSelector: {}
+tolerations: []
+affinity: {}
