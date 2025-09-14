@@ -128,8 +128,10 @@ output "resource_prefix" {
 }
 
 
+# ======================
+# Jenkins ВИХОДИ
+# ======================
 
-#-------------Jenkins-----------------
 output "jenkins_release" {
   description = "Jenkins release name"
   value       = module.jenkins.jenkins_release_name
@@ -138,7 +140,11 @@ output "jenkins_namespace" {
   description = "Jenkins namespace"
   value       = module.jenkins.jenkins_namespace
 }
-#-------------ArgoCD-----------------
+
+# ======================
+# ArgoCD ВИХОДИ
+# ======================
+
 output "argocd_namespace" {
   description = "ArgoCD namespace"
   value       = module.argo_cd.namespace
