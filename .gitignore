@@ -125,7 +125,6 @@ site/
 # Local development files
 .local/
 local/
-dev/
 development/
 
 # Test files
