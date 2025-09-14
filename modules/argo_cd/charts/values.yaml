@@ -1,0 +1,40 @@
+# ===============================================
+# КОНФІГУРАЦІЯ ARGOCD APPLICATIONS ТА REPOSITORIES
+# ===============================================
+
+applications:
+  - name: example-app                    # Ім'я застосунку в ArgoCD
+    namespace: default                   # Namespace у Kubernetes для деплою
+    project: default                     # Назва ArgoCD проєкту (default - вбудований)
+    
+    # Джерело коду застосунку
+    source:
+      repoURL: ${github_repo_url}        # Посилання на Git репозиторій з Helm chart
+      path: charts/django-app            # Шлях до Helm chart всередині репозиторію
+      targetRevision: lesson-8-9         # Гілка Git для моніторингу змін
+      helm:
+        valueFiles:                      # YAML файли з налаштуваннями для Helm
+          - values.yaml
+          
+    # Місце призначення для деплою
+    destination:
+      server: https://kubernetes.default.svc  # Адреса Kubernetes API (внутрішній кластер)
+      namespace: default                       # Kubernetes namespace для застосунку
+      
+    # Політика синхронізації
+    syncPolicy:
+      automated:                         # Автоматична синхронізація
+        prune: true                      # Видаляти ресурси, які більше не в Git
+        selfHeal: true                   # Автоматично виправляти ручні зміни в кластері
+
+# Налаштування репозиторіїв
+repositories:
+  - name: example-app                    # Внутрішнє ім'я репозиторію в ArgoCD
+    url: ${github_repo_url}              # Повний URL GitHub репозиторію
+    username: ${github_user}             # GitHub username для доступу
+    password: ${github_pat}              # GitHub Personal Access Token
+
+# Загальна конфігурація репозиторіїв
+repoConfig:
+  insecure: "true"                       # Дозволити небезпечні HTTPS з'єднання (тільки для dev!)
+  enableLfs: "true"                      # Увімкнути підтримку Git LFS для великих файлів
