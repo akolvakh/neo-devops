@@ -1,12 +1,21 @@
+# ==================================================
+# КОНФІГУРАЦІЯ JENKINS HELM CHART
+# ==================================================
+
 controller:
+  # Налаштування адміністратора
   admin:
     username: admin
     password: admin123
+    
+  # Конфігурація сервісу
   serviceType: LoadBalancer
   servicePort: 80
   service:
     port: 80
     targetPort: 8080
+    
+  # Ресурси для Jenkins контролера
   resources:
     limits:
       cpu: "500m"
@@ -14,25 +23,53 @@ controller:
     requests:
       cpu: "250m"
       memory: "512Mi"
+      
+  # Налаштування постійного сховища
   persistentVolume:
     enabled: true
     storageClass: "ebs-sc"
     size: 10Gi
+    
+  # Список плагінів для встановлення
   installPlugins:
-    - kubernetes:latest
-    - workflow-aggregator:latest
-    - git:latest
-    - configuration-as-code:latest
-    - credentials-binding:latest
-    - github:latest
-    - docker-plugin:latest
-    - docker-workflow:latest
-    - job-dsl:latest
+    - kubernetes:latest              # Kubernetes integration
+    - workflow-aggregator:latest     # Pipeline plugin
+    - git:latest                    # Git support
+    - configuration-as-code:latest   # JCasC support
+    - credentials-binding:latest     # Credentials handling
+    - github:latest                 # GitHub integration
+    - docker-plugin:latest          # Docker support
+    - docker-workflow:latest        # Docker pipeline steps
+    - job-dsl:latest               # Job DSL plugin
+    
+  # Service Account (створюється Terraform модулем)
   serviceAccount:
     name: jenkins-sa
     create: false
+    
+  # Jenkins Configuration as Code (JCasC)
   JCasC:
     configScripts:
+      # Налаштування безпеки
+      security: |
+        security:
+          scriptApproval:
+            approvedSignatures:
+              - "method groovy.lang.GroovyObject invokeMethod java.lang.String java.lang.Object"
+              - "staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods findAll java.lang.Object groovy.lang.Closure"
+              - "staticMethod org.codehaus.groovy.runtime.DefaultGroovyMethods collect java.lang.Object groovy.lang.Closure"
+        jenkins:
+          securityRealm:
+            local:
+              allowsSignup: false
+              users:
+                - id: admin
+                  password: admin123
+          authorizationStrategy:
+            loggedInUsersCanDoAnything:
+              allowAnonymousRead: false
+              
+      # Налаштування облікових даних
       credentials: |
         credentials:
           system:
@@ -43,25 +80,28 @@ controller:
                       id: github-token
                       username: ${github_user}
                       password: ${github_pat}
-                      description: GitHub PAT
+                      description: GitHub Personal Access Token для доступу до репозиторію
+                      
+      # Автоматичне створення seed job
       seed-job: |
         jobs:
           - script: >
               job('seed-job') {
-                description('Job to generate pipeline for Django project')
+                description('Генератор pipeline для Django проєкту з GitHub')
                 scm {
                   git {
                     remote {
                       url('${github_repo_url}')
                       credentials('github-token')
                     }
-                    branches('*/lesson-9')
+                    branches('*/lesson-8-9')
                   }
                 }
                 steps {
                   dsl {
                     text('''
                       pipelineJob("goit-django-docker") {
+                        description("CI/CD Pipeline для Django застосунку")
                         definition {
                           cpsScm {
                             scm {
@@ -70,13 +110,17 @@ controller:
                                   url("${github_repo_url}")
                                   credentials("github-token")
                                 }
-                                branches("*/lesson-9")
+                                branches("*/lesson-8-9")
                               }
                             }
+                            scriptPath("Jenkinsfile")
                           }
                         }
                       }
                     ''')
                   }
+                }
+                triggers {
+                  scm('H/5 * * * *')  // Перевіряти зміни кожні 5 хвилин
                 }
               }

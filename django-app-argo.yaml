@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: "https://github.com/akolvakh/neo-devops"
     targetRevision: lesson-8-9
-    path: charts/django-app # folder containing Chart.yaml
+    path: charts/django-app
     helm:
       valueFiles:
         - values.yaml

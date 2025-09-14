@@ -197,3 +197,48 @@ module "argo_cd" {
     kubernetes = kubernetes
   }
 }
+
+# ======================
+# СЕКРЕТ ДЛЯ DJANGO ПРИЛОЖЕНИЯ
+# ======================
+
+resource "kubernetes_secret" "django_app_secret" {
+  metadata {
+    name      = "example-app-django-app-secret"
+    namespace = "default"
+  }
+  
+  data = {
+    database-url = "postgresql://${var.db_user}:${var.db_password}@${module.rds.db_instance_hostname}:${module.rds.db_instance_port}/${module.rds.db_instance_name}"
+  }
+  
+  type = "Opaque"
+  
+  depends_on = [module.eks]
+}
+
+# ======================
+# СЕКРЕТ GITHUB ДЛЯ JENKINS
+# ======================
+
+resource "kubernetes_secret" "jenkins_github_credentials" {
+  metadata {
+    name      = "jenkins-github-credentials"
+    namespace = "jenkins"
+    labels = {
+      "jenkins.io/credentials-type" = "usernamePassword"
+    }
+    annotations = {
+      "jenkins.io/credentials-description" = "GitHub credentials for Jenkins"
+    }
+  }
+  
+  data = {
+    username = var.github_user
+    password = var.github_pat
+  }
+  
+  type = "Opaque"
+  
+  depends_on = [module.jenkins]
+}
