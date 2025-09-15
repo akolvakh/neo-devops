@@ -292,7 +292,7 @@ module "monitoring" {
   prometheus_storage_size = "20Gi"
   grafana_storage_size    = "5Gi"
   
-  grafana_admin_password = "Admin12345!!"
+  grafana_admin_password = "TempPassword123!"
   
   depends_on = [module.eks]
 }

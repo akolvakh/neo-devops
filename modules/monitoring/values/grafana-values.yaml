@@ -1,5 +1,5 @@
 adminUser: admin
-adminPassword: Admin12345!!
+adminPassword: TempPassword123!
 
 service:
   type: LoadBalancer
