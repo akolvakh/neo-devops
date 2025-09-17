@@ -347,26 +347,3 @@ jobs:
       - name: Deploy to EKS
         run: ./scripts/deploy-app.sh
 ```
-
-## 📞 Підтримка
-
-### URL додатку:
-- **Головна сторінка**: Отримати через `kubectl get svc django-app`
-- **Адмін панель**: `http://LOADBALANCER_URL/admin/`
-- **Креденшали адміна**: створені через `kubectl exec -it POD_NAME -- python manage.py createsuperuser`
-
-### Контакти:
-- **Автор**: Антон Кольвах
-- **Email**: [ваш-email]
-- **Проект**: GoIT DevOps Course
-
-### Корисні посилання:
-- [AWS EKS Documentation](https://docs.aws.amazon.com/eks/)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-- [Helm Documentation](https://helm.sh/docs/)
-- [Django Documentation](https://docs.djangoproject.com/)
-- [Terraform Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-
----
-**Версія**: 1.3  
-**Остання оновка**: Вересень 2025
