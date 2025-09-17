@@ -378,22 +378,3 @@ curl $(terraform output -raw prometheus_url)/api/v1/query?query=up
    # Port forward для локального доступу
    kubectl port-forward svc/jenkins -n jenkins 8080:8080
    ```
-
-## 🏆 Досягнення
-
-✅ **Повна автоматизація** інфраструктури  
-✅ **GitOps workflow** з ArgoCD  
-✅ **Comprehensive monitoring** з Prometheus/Grafana  
-✅ **Production-ready** security practices  
-✅ **Scalable architecture** готова для production  
-✅ **Cost-optimized** конфігурація  
-
----
-
-## 📄 Ліцензія
-
-Цей проект створений в освітніх цілях для курсу GoIT DevOps.
-
----
-
-**🚀 Готово до використання в production! Happy deploying! 🎉**
