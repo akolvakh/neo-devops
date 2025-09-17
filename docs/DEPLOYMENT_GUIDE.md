@@ -4,16 +4,6 @@
 
 Цей проєкт створює повну інфраструктуру для CI/CD з наступними компонентами:
 
-```mermaid
-graph TB
-    A[GitHub Repository] --> B[Jenkins CI]
-    B --> C[Kaniko Build]
-    C --> D[Amazon ECR]
-    D --> E[ArgoCD GitOps]
-    E --> F[EKS Cluster]
-    F --> G[Django Application]
-    F --> H[PostgreSQL RDS]
-```
 
 ## 🛠️ Компоненти інфраструктури
 
