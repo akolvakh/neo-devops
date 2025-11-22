@@ -1,0 +1,68 @@
+# ======================
+# ПРОЕКТ ТА СЕРЕДОВИЩЕ
+# ======================
+
+# Назва проекту (обов'язково)
+project_name = "my-awesome-project"
+
+# Середовище розгортання (обов'язково)  
+environment = "dev"
+
+# Власник проекту (обов'язково)
+owner = "team-name"
+
+# AWS регіон
+aws_region = "us-east-1"
+
+# ======================
+# МЕРЕЖЕВІ НАЛАШТУВАННЯ
+# ======================
+
+# CIDR блок для VPC
+vpc_cidr_block = "10.0.0.0/16"
+
+# Кількість підмереж (буде створено стільки публічних та приватних)
+subnet_count = 2
+
+# ======================
+# S3 НАЛАШТУВАННЯ
+# ======================
+
+# Чи дозволити примусове видалення S3 bucket з об'єктами
+s3_bucket_force_destroy = false
+
+# ======================
+# ECR НАЛАШТУВАННЯ  
+# ======================
+
+# Увімкнути сканування образів на вразливості
+ecr_scan_on_push = true
+
+# Тип мутабельності тегів (MUTABLE або IMMUTABLE)
+ecr_image_tag_mutability = "MUTABLE"
+
+# ======================
+# ПРИКЛАДИ РІЗНИХ СЕРЕДОВИЩ
+# ======================
+
+# Для PRODUCTION:
+# project_name = "production-app"
+# environment = "prod"
+# vpc_cidr_block = "10.1.0.0/16"
+# subnet_count = 3
+# s3_bucket_force_destroy = false
+# ecr_image_tag_mutability = "IMMUTABLE"
+
+# Для STAGING:
+# project_name = "staging-app"
+# environment = "staging"
+# vpc_cidr_block = "10.2.0.0/16"
+# subnet_count = 2
+# s3_bucket_force_destroy = true
+
+# Для DEVELOPMENT:
+# project_name = "dev-app"
+# environment = "dev"
+# vpc_cidr_block = "10.0.0.0/16"
+# subnet_count = 2
+# s3_bucket_force_destroy = true
